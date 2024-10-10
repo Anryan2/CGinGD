@@ -8,8 +8,8 @@ void cg::renderer::rasterization_renderer::init()
 	rasterizer = std::make_shared< cg::renderer::rasterizer<cg::vertex, cg::unsigned_color> >();
 	rasterizer->set_viewport(settings->width, settings->height);
 	render_target = std::make_shared< cg::resource<cg::unsigned_color> >(settings->width, settings->height);
-	depth_buffer = std::make_shared< cg::resource<float> >(settings->width, settings->height);
-	rasterizer->set_render_target(render_target, depth_buffer);
+
+	rasterizer->set_render_target(render_target);
 	model = std::make_shared<cg::world::model>();
 	model->load_obj(settings->model_path);
 
@@ -60,7 +60,7 @@ void cg::renderer::rasterization_renderer::render()
 
 	auto stop = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float, std::milli> duration = stop - start;
-	std::cout << "Rasterization took: " << duration.count() << " ms\n";
+	std::cout << "Rasterization time: " << duration.count() << " ms\n";
 
 	cg::utils::save_resource(*render_target, settings->result_path);
 }

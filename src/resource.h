@@ -108,9 +108,9 @@ namespace cg
 		static unsigned_color from_color(const color& color)
 		{
 			unsigned_color out{};
-			out.r = std::clamp(static_cast<int>(255.f * color.r), 0, 255);
-			out.g = std::clamp(static_cast<int>(255.f * color.g), 0, 255);
-			out.b = std::clamp(static_cast<int>(255.f * color.b), 0, 255);
+			out.r = std::clamp(static_cast<int>(255.0f * color.r), 0, 255);
+			out.g = std::clamp(static_cast<int>(255.0f * color.g), 0, 255);
+			out.b = std::clamp(static_cast<int>(255.0f * color.b), 0, 255);
 			return out;
 		};
 		static unsigned_color from_float3(const float3& color)
@@ -125,10 +125,10 @@ namespace cg
 		float3 to_float3() const
 		{
 			return float3{
-						   static_cast<float>(r),
-						   static_cast<float>(g),
-						   static_cast<float>(b),
-				   } / 255.f;
+				static_cast<float>(r),
+				static_cast<float>(g),
+				static_cast<float>(b),
+			} / 255.f;
 		};
 		uint8_t r;
 		uint8_t g;

@@ -2,6 +2,7 @@
 
 #include "resource.h"
 
+
 #include <functional>
 #include <iostream>
 #include <linalg.h>
@@ -46,7 +47,7 @@ namespace cg::renderer
 		size_t width = 1920;
 		size_t height = 1080;
 
-		int edge_function(int2 a, int2 b, int2 c);
+		float edge_function(float2 a, float2 b, float2 c);
 		bool depth_test(float z, size_t x, size_t y);
 	};
 
@@ -135,8 +136,9 @@ namespace cg::renderer
 			float2 vertex_c = float2{vertices[2].x, vertices[2].y};
 
 			float edge = edge_function(vertex_a, vertex_b, vertex_c);
-
-			float2 min_vertex = min(vertex_a, min(vertex_b, vertex_c));
+			
+			float2 min_border = float2{0, 0}
+			
 			float2 bounding_box_begin = round(clamp(
 					min_vertex,
 					float2{0,0},
@@ -148,8 +150,8 @@ namespace cg::renderer
 					float2{0,0},
 					float2{static_cast<float>(width - 1), static_cast<float>(height - 1)}
 					));
-			for (float x = bounding_box_begin.x; x <= bounding_box_end.x; x += 1.f) {
-				for (float y = bounding_box_begin.y; y <= bounding_box_end.y; y += 1.f) {
+			for (float x = bounding_box_begin.x; x <= bounding_box_end.x; x += 1.0f) {
+				for (float y = bounding_box_begin.y; y <= bounding_box_end.y; y += 1.0f) {
 					float2 point{x, y};
 					float edge0 = edge_function(vertex_a, vertex_b, point);
 					float edge1 = edge_function(vertex_b, vertex_c, point);
@@ -182,8 +184,8 @@ namespace cg::renderer
 	}
 
 	template<typename VB, typename RT>
-	inline int
-	rasterizer<VB, RT>::edge_function(int2 a, int2 b, int2 c)
+	inline float
+	rasterizer<VB, RT>::edge_function(float2 a, float2 b, float2 c)
 	{
 		return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
 	}
