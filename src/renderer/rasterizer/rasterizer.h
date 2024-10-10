@@ -137,8 +137,8 @@ namespace cg::renderer
 
 			float edge = edge_function(vertex_a, vertex_b, vertex_c);
 			
-			float2 min_border = float2{0, 0}
 			
+			float2 min_vertex = min(vertex_a, min(vertex_b, vertex_c));
 			float2 bounding_box_begin = round(clamp(
 					min_vertex,
 					float2{0,0},
