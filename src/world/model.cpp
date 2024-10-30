@@ -21,17 +21,17 @@ void cg::world::model::load_obj(const std::filesystem::path& model_path)
 	readerConfig.triangulate = true;
 
 	tinyobj::ObjReader objReader;
-	if(!objReader.ParseReomFile(model_path.string(), readerConfig))
+	if(!objReader.ParseFromFile(model_path.string(), readerConfig))
 	{
-		if(!objReader.Errors().empty())
+		if(!objReader.Error().empty())
 		{
 			THROW_ERROR(objReader.Errors());
 		}
 	}
 
-	auto& shapes = obgReader.GetShapes();
-	auto& materials = obgReader.GetMaterials();
-	auto& atrrib = obgReader.GetAtrrib();
+	auto& shapes = objReader.GetShapes();
+	auto& materials = objReader.GetMaterials();
+	auto& atrrib = objReader.GetAtrrib();
 
 	allocate_buffers(shapes);
 	fill_buffers(shapes, atrrib, materials, model_path.parent_path());
