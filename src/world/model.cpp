@@ -119,7 +119,7 @@ void model::fill_vertex_data(cg::vertex& vertex, const tinyobj::attrib_t& attrib
 		vertex v = 0f;
 	}else{
 		vertex.u = attrib.textcoords[2 * idx.vertex_index];
-		vertex.v = attrib.textcoords[2 * idx.vertex_index+1];
+		vertex.v = attrib.textcoords[2 * idx.vertex_index + 1];
 		
 	}
 	vertex.ambient_r = material.ambient[0];
