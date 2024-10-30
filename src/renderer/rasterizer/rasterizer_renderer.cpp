@@ -38,17 +38,17 @@ void cg::renderer::rasterization_renderer::render()
 			camera->get_view_matrix(),
 			model->get_world_matrix()
 	);
-	rasterizer->vertex_shader = [&](float4 vertex, cg::vertex vertex_data) {
+	rasterizer->vertex_shader = [&](float4 vertex, cg::vertex data) {
 		auto processed = mul(matrix, vertex);
-		return std::make_pair(processed, vertex_data);
+		return std::make_pair(processed, data);
 	};
 
-	rasterizer->pixel_shader = [](cg::vertex vertex_data, float z) {
+	rasterizer->pixel_shader = [](cg::vertex data, float z) {
 		return cg::color{
-				vertex_data.ambient_r,
-				vertex_data.ambient_g,
-				vertex_data.ambient_b
-				//				0, 0, 0.0
+				data.ambient_r,
+				data.ambient_g,
+				data.ambient_b
+				
 		};
 	};
 

@@ -91,12 +91,15 @@ namespace cg
 	{
 		static color from_float3(const float3& in)
 		{
-			color color{in.x, in.y, in.z};
-			return color;
+			color out{};
+			out.r = in.x;
+			out.g = in.y;
+			out.b = in.z;
+			return out;
 		};
 		float3 to_float3() const
 		{
-			return float3{r, g, b};
+			return float3(r, g, b);
 		}
 		float r;
 		float g;
@@ -108,9 +111,9 @@ namespace cg
 		static unsigned_color from_color(const color& color)
 		{
 			unsigned_color out{};
-			out.r = std::clamp(static_cast<int>(255.0f * color.r), 0, 255);
-			out.g = std::clamp(static_cast<int>(255.0f * color.g), 0, 255);
-			out.b = std::clamp(static_cast<int>(255.0f * color.b), 0, 255);
+			out.r = std::clamp(static_cast<int>(255.f * color.r), 0, 255);
+			out.g = std::clamp(static_cast<int>(255.f * color.g), 0, 255);
+			out.b = std::clamp(static_cast<int>(255.f * color.b), 0, 255);
 			return out;
 		};
 		static unsigned_color from_float3(const float3& color)

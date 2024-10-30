@@ -61,7 +61,7 @@ namespace cg::renderer
 			render_target = in_render_target;
 		if(in_depth_buffer)
 			depth_buffer = in_depth_buffer;
-		// TODO Lab: 1.02 Implement `set_render_target`, `set_viewport`, `clear_render_target` methods of `cg::renderer::rasterizer` class
+		
 		// TODO Lab: 1.06 Adjust `set_render_target`, and `clear_render_target` methods of `cg::renderer::rasterizer` class to consume a depth buffer
 	}
 
@@ -70,7 +70,7 @@ namespace cg::renderer
 	{
 		height = in_height;
 		width = in_width;
-		// TODO Lab: 1.02 Implement `set_render_target`, `set_viewport`, `clear_render_target` methods of `cg::renderer::rasterizer` class
+		
 	}
 
 	template<typename VB, typename RT>
@@ -112,7 +112,7 @@ namespace cg::renderer
 	{
 		size_t vertex_id = vertex_offset;
 		while (vertex_id < vertex_offset + num_vertexes) {
-			std::vector<VB> vertices(3); //because topology always 3
+			std::vector<VB> vertices(3); 
 			vertices[0] = vertex_buffer->item (
 					index_buffer->item(vertex_id++));
 			vertices[1] = vertex_buffer->item (
