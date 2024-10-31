@@ -213,7 +213,7 @@ namespace cg::renderer
 			float3 right, float3 up, size_t depth, size_t accumulation_num)
 	{	
 		float frame_weight = 1.f/static_cast<float>(accumulation_num);
-		for(int fraim_id = 0; fraim_id < accumulation_num; fraim_id++){
+		for(int frame_id = 0; frame_id < accumulation_num; frame_id++){
 			std::cout << "Tracing frame #" << frame_id + 1 << "\n";
 			float2 jitter = get_jitter(fraim_id);
 			#pragma omp parallel for
