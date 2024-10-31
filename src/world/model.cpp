@@ -25,16 +25,16 @@ void cg::world::model::load_obj(const std::filesystem::path& model_path)
 	{
 		if(!objReader.Error().empty())
 		{
-			THROW_ERROR(objReader.Errors());
+			THROW_ERROR(objReader.Error());
 		}
 	}
 
 	auto& shapes = objReader.GetShapes();
 	auto& materials = objReader.GetMaterials();
-	auto& atrrib = objReader.GetAtrrib();
+	auto& attrib = objReader.GetAttrib();
 
 	allocate_buffers(shapes);
-	fill_buffers(shapes, atrrib, materials, model_path.parent_path());
+	fill_buffers(shapes, attrib, materials, model_path.parent_path());
 }
 
 void model::allocate_buffers(const std::vector<tinyobj::shape_t>& shapes)
@@ -95,7 +95,7 @@ float3 cg::world::model::compute_normal(const tinyobj::attrib_t& attrib, const t
 		attrib.vertices[3*c_id.vertex_index + 2]
 	);
 
-	 return normilize(cross(b-a, c-a));
+	 return normalize(cross(b-a, c-a));
 }
 
 void model::fill_vertex_data(cg::vertex& vertex, const tinyobj::attrib_t& attrib, const tinyobj::index_t idx, const float3 computed_normal, const tinyobj::material_t material)
@@ -115,8 +115,8 @@ void model::fill_vertex_data(cg::vertex& vertex, const tinyobj::attrib_t& attrib
 		vertex.nz = attrib.normals[3 * idx.vertex_index+2];
 	}
 	if (idx.texcoord_index < 0){
-		vertex u = 0f;
-		vertex v = 0f;
+		vertex u = 0.f;
+		vertex v = 0.f;
 	}else{
 		vertex.u = attrib.textcoords[2 * idx.vertex_index];
 		vertex.v = attrib.textcoords[2 * idx.vertex_index + 1];
