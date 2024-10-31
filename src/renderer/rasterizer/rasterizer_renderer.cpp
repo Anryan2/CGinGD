@@ -8,8 +8,8 @@ void cg::renderer::rasterization_renderer::init()
 	rasterizer = std::make_shared< cg::renderer::rasterizer<cg::vertex, cg::unsigned_color> >();
 	rasterizer->set_viewport(settings->width, settings->height);
 	render_target = std::make_shared< cg::resource<cg::unsigned_color> >(settings->width, settings->height);
-
-	rasterizer->set_render_target(render_target);
+	depth_buffer = std::make_shared<cg::resource<cg::unsigned_color>>(settings -> width, settings -> height);
+	rasterizer->set_render_target(render_target, depth_buffer);
 	model = std::make_shared<cg::world::model>();
 	model->load_obj(settings->model_path);
 
