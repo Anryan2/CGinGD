@@ -43,7 +43,7 @@ void model::allocate_buffers(const std::vector<tinyobj::shape_t>& shapes)
 		size_t index_offset = 0;
 		unsigned int vertex_buffer_size = 0;
 		unsigned int index_buffer_size = 0;
-		std::map<std:: tuple<int, int, int,>, unsigned int> index_map;
+		std::map<std:: tuple<int, int, int>, unsigned int> index_map;
 		const auto& mesh = shape.mesh;
 
 		for (const auto& face: mesh.num_face_vertices){
@@ -73,9 +73,9 @@ void model::allocate_buffers(const std::vector<tinyobj::shape_t>& shapes)
 
 float3 cg::world::model::compute_normal(const tinyobj::attrib_t& attrib, const tinyobj::mesh_t& mesh, size_t index_offset)
 {
-	auto a_id = mesh.indexes[index_offset];
-	auto b_id = mesh.indexes[index_offset+1];
-	auto c_id = mesh.indexes[index_offset+2];
+	auto a_id = mesh.indices[index_offset];
+	auto b_id = mesh.indices[index_offset+1];
+	auto c_id = mesh.indices[index_offset+2];
 
 	float3 a(
 		attrib.vertices[3*a_id.vertex_index],
@@ -115,11 +115,11 @@ void model::fill_vertex_data(cg::vertex& vertex, const tinyobj::attrib_t& attrib
 		vertex.nz = attrib.normals[3 * idx.vertex_index+2];
 	}
 	if (idx.texcoord_index < 0){
-		vertex u = 0.f;
-		vertex v = 0.f;
+		vertex.u = 0.f;
+		vertex.v = 0.f;
 	}else{
-		vertex.u = attrib.textcoords[2 * idx.vertex_index];
-		vertex.v = attrib.textcoords[2 * idx.vertex_index + 1];
+		vertex.u = attrib.texcoords[2 * idx.vertex_index];
+		vertex.v = attrib.texcoords[2 * idx.vertex_index + 1];
 		
 	}
 	vertex.ambient_r = material.ambient[0];
@@ -142,7 +142,7 @@ void model::fill_buffers(const std::vector<tinyobj::shape_t>& shapes, const tiny
 		unsigned int index_buffer_id = 0;
 		auto vertex_buffer = vertex_buffers[s];
 		auto index_buffer = index_buffers[s];
-		std::map<std:: tuple<int, int, int,>, unsigned int> index_map;
+		std::map<std:: tuple<int, int, int>, unsigned int> index_map;
 		const auto& mesh = shapes[s].mesh;
 
 		for (size_t f; f < mesh.num_face_vertices.size(); f++){
@@ -168,8 +168,8 @@ void model::fill_buffers(const std::vector<tinyobj::shape_t>& shapes, const tiny
 			}
 			index_offset+= face;
 		}
-		if(!materials[mesh.materials_ids[0]].deffuse_texname.empty()){
-			textures[s] = base_folder / materials[mesh.material_id[0]].deffuse_texname;
+		if(!materials[mesh.material_ids[0]].diffuse_texname.empty()){
+			textures[s] = base_folder / materials[mesh.material_ids[0]].diffuse_texname;
 		}
 	}
 }
