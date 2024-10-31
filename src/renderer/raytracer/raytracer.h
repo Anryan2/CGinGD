@@ -215,7 +215,7 @@ namespace cg::renderer
 		float frame_weight = 1.f/static_cast<float>(accumulation_num);
 		for(int frame_id = 0; frame_id < accumulation_num; frame_id++){
 			std::cout << "Tracing frame #" << frame_id + 1 << "\n";
-			float2 jitter = get_jitter(fraim_id);
+			float2 jitter = get_jitter(frame_id);
 			#pragma omp parallel for
 			for(int x = 0; x < width; x++)
 			{
@@ -231,7 +231,7 @@ namespace cg::renderer
 
 					auto &history_pixel = history->item(x, y);
 					history_pixel += sqrt(payload.color.to_float3() * frame_weight);
-					if (fraim_id == accumulation_num - 1){
+					if (frame_id == accumulation_num - 1){
 						render_target -> item(x, y) = RT::from_float3(history_pixel);
 					}
 				}
@@ -324,9 +324,9 @@ namespace cg::renderer
 		}
 		
 		constexpr int base_y = 2;
-		int index = frame_id+1;
-		float inv_base = 1.f/static_cast<float>(base_y);
-		float fraction = inv_base;
+		index = frame_id+1;
+		inv_base = 1.f/static_cast<float>(base_y);
+		fraction = inv_base;
 		while (index > 0)
 		{
 			result.x = (index%base_x)*fraction;
