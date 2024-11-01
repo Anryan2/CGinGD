@@ -48,7 +48,7 @@ void model::allocate_buffers(const std::vector<tinyobj::shape_t>& shapes)
 
 		for (const auto& face: mesh.num_face_vertices){
 			for (size_t v = 0; v < face; v++){
-				tinyobj:: index_t idx = mesh.indices[index_offset*v];
+				tinyobj:: index_t idx = mesh.indices[index_offset+v];
 				auto idx_tuple = std:: make_tuple(
 					idx.vertex_index,
 					idx.normal_index,
@@ -110,16 +110,16 @@ void model::fill_vertex_data(cg::vertex& vertex, const tinyobj::attrib_t& attrib
 		vertex.nz = computed_normal.z;
 	}
 	else{
-		vertex.nx = attrib.normals[3 * idx.vertex_index];
-		vertex.ny = attrib.normals[3 * idx.vertex_index+1];
-		vertex.nz = attrib.normals[3 * idx.vertex_index+2];
+		vertex.nx = attrib.normals[3 * idx.normal_index];
+		vertex.ny = attrib.normals[3 * idx.normal_index+1];
+		vertex.nz = attrib.normals[3 * idx.normal_index+2];
 	}
 	if (idx.texcoord_index < 0){
 		vertex.u = 0.f;
 		vertex.v = 0.f;
 	}else{
-		vertex.u = attrib.texcoords[2 * idx.vertex_index];
-		vertex.v = attrib.texcoords[2 * idx.vertex_index + 1];
+		vertex.u = attrib.texcoords[2 * idx.texcoord_index];
+		vertex.v = attrib.texcoords[2 * idx.texcoord_index + 1];
 		
 	}
 	vertex.ambient_r = material.ambient[0];
@@ -152,7 +152,7 @@ void model::fill_buffers(const std::vector<tinyobj::shape_t>& shapes, const tiny
 				normal = compute_normal(attrib, mesh, index_offset);
 			}
 			for (size_t v = 0; v < face; v++){
-				tinyobj:: index_t idx = mesh.indices[index_offset*v];
+				tinyobj:: index_t idx = mesh.indices[index_offset+v];
 				auto idx_tuple = std:: make_tuple(
 					idx.vertex_index,
 					idx.normal_index,
@@ -163,7 +163,7 @@ void model::fill_buffers(const std::vector<tinyobj::shape_t>& shapes, const tiny
 					fill_vertex_data(vertex, attrib, idx, normal, material);
 					index_map[idx_tuple] = vertex_buffer_id++;
 				}
-				index_buffer -> item(index_buffer_id++) = index_map[idx_tuple];
+				index_buffer -> item(index_buffer_id) = index_map[idx_tuple];
 				index_buffer_id++;
 			}
 			index_offset+= face;

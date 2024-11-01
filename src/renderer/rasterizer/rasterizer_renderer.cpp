@@ -40,6 +40,7 @@ void cg::renderer::rasterization_renderer::render()
 	);
 	rasterizer->vertex_shader = [&](float4 vertex, cg::vertex data) {
 		auto processed = mul(matrix, vertex);
+		std::cout << "Vertex" << processed.x << ", " << processed.y << ", " << processed.z << ", "<< processed.w << "\n";  
 		return std::make_pair(processed, data);
 	};
 
