@@ -145,7 +145,7 @@ void model::fill_buffers(const std::vector<tinyobj::shape_t>& shapes, const tiny
 		std::map<std:: tuple<int, int, int>, unsigned int> index_map;
 		const auto& mesh = shapes[s].mesh;
 
-		for (size_t f; f < mesh.num_face_vertices.size(); f++){
+		for (size_t f = 0; f < mesh.num_face_vertices.size(); f++){
 			int face = mesh.num_face_vertices[f];
 			float3 normal;
 			if (mesh.indices[index_offset].normal_index < 0){
