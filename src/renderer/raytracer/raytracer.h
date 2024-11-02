@@ -257,7 +257,7 @@ namespace cg::renderer
 			if(!aabb.aabb_test(ray)){continue;}
 			for (auto &triangle: aabb.get_triangles()){
 				payload payload = intersection_shader(triangle, ray);
-				if (payload.t > max_t && payload.t < closest_hit_payload.t ){
+				if (payload.t > min_t && payload.t < closest_hit_payload.t ){
 					closest_hit_payload = payload;
 					closest_triangle = &triangle;
 					if(any_hit_shader){
@@ -268,7 +268,7 @@ namespace cg::renderer
 		}
 		
 
-		if (closest_hit_payload.t < max_t){
+		if (closest_triangle != nullptr && closest_hit_payload.t < max_t){
 			if (closest_hit_shader)
 				return closest_hit_shader(ray, closest_hit_payload, *closest_triangle, depth);
 		}
@@ -320,18 +320,18 @@ namespace cg::renderer
 		{
 			result.x = (index%base_x)*fraction;
 			index /= base_x;
-			fraction+= inv_base;
+			fraction*= inv_base;
 		}
 		
-		constexpr int base_y = 2;
+		constexpr int base_y = 3;
 		index = frame_id+1;
 		inv_base = 1.f/static_cast<float>(base_y);
 		fraction = inv_base;
 		while (index > 0)
 		{
-			result.x = (index%base_x)*fraction;
+			result.y = (index%base_y)*fraction;
 			index /= base_y;
-			fraction+= inv_base;
+			fraction*= inv_base;
 		}
 		return result - .5f;
 		
@@ -362,7 +362,7 @@ namespace cg::renderer
 	template<typename VB>
 	inline bool aabb<VB>::aabb_test(const ray& ray) const
 	{
-		float3 inv_dir = float3(1.f)/ray.direction;
+		float3 inv_dir = 1.f/ray.direction;
 		float3 t0 = (aabb_max - ray.position)*inv_dir;
 		float3 t1 = (aabb_min - ray.position)*inv_dir;
 		float3 t_min = min(t0, t1);

@@ -36,7 +36,7 @@ void cg::world::camera::set_phi(float in_phi)
 
 void cg::world::camera::set_angle_of_view(float in_aov)
 {
-	angle_of_view = in_aov * static_cast<float>(M_PI)*180.f;
+	angle_of_view = in_aov * static_cast<float>(M_PI)/180.f;
 }
 
 void cg::world::camera::set_height(float in_height)
@@ -68,7 +68,7 @@ const float4x4 cg::world::camera::get_view_matrix() const
 
 	float3 z_axis = normalize(position - eye);
 	float3 x_axis = normalize(cross(up, z_axis));
-	float3 y_axis = cross(x_axis, y_axis);
+	float3 y_axis = cross(z_axis, x_axis);
 	return float4x4{
 		{x_axis.x, y_axis.x, z_axis.x, 0},
 		{x_axis.y, y_axis.y, z_axis.y, 0},
@@ -80,20 +80,19 @@ const float4x4 cg::world::camera::get_view_matrix() const
 #ifdef DX12
 const DirectX::XMMATRIX cg::world::camera::get_dxm_view_matrix() const
 {
-	// TODO Lab: 3.08 Implement `get_dxm_view_matrix`, `get_dxm_projection_matrix`, and `get_dxm_mvp_matrix` methods of `camera`
-	return  DirectX::XMMatrixIdentity();
+	DirectX::FXMVECTOR eye_position{position.x, position.y, position.z};
+	DirectX::FXMVECTOR eye_direction{get_direction().x, get_direction().y, get_direction().z};
+	DirectX::FXMVECTOR up_direction{get_up().x, get_up().y, get_up().z};
+	return DirectX::XMMatrixLookToRH(eye_position, eye_direction, up_direction);
 }
 
 const DirectX::XMMATRIX cg::world::camera::get_dxm_projection_matrix() const
 {
-	// TODO Lab: 3.08 Implement `get_dxm_view_matrix`, `get_dxm_projection_matrix`, and `get_dxm_mvp_matrix` methods of `camera`
-	return  DirectX::XMMatrixIdentity();
+	return  DirectX::XMMatrixPerspectiveFovRH(angle_of_view, aspect_ratio, z_near, z_far);
 }
-
 const DirectX::XMMATRIX camera::get_dxm_mvp_matrix() const
 {
-	// TODO Lab: 3.08 Implement `get_dxm_view_matrix`, `get_dxm_projection_matrix`, and `get_dxm_mvp_matrix` methods of `camera`
-	return  DirectX::XMMatrixIdentity();
+	return get_dxm_view_matrix()*get_dxm_projection_matrix();
 }
 #endif
 
